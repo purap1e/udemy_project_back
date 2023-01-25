@@ -4,7 +4,8 @@ import com.example.udemy.entities.User;
 import com.example.udemy.repositories.RoleRepository;
 import com.example.udemy.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,11 +20,11 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public User signUpNewUser(@RequestParam(name = "user") String userJson) throws Exception {
+    public ResponseEntity<?> signUpNewUser(@RequestParam(name = "user") String userJson) throws Exception {
         User user = new ObjectMapper().readValue(userJson,User.class);
         user.getRoles().add(roleRepository.findByName("ROLE_USER"));
-        return userService.registerUser(user);
+        userService.registerUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
 
 }

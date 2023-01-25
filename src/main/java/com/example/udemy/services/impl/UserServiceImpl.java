@@ -2,6 +2,7 @@ package com.example.udemy.services.impl;
 
 import com.example.udemy.entities.Role;
 import com.example.udemy.entities.User;
+import com.example.udemy.exceptions.UsernameExistsException;
 import com.example.udemy.repositories.RoleRepository;
 import com.example.udemy.repositories.UserRepository;
 import com.example.udemy.services.UserService;
@@ -72,7 +73,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User registerUser(User user) throws Exception {
         if (usernameExist(user.getUsername())) {
-            throw new Exception("User " + user.getUsername() + " already exist");
+            throw new UsernameExistsException(user.getUsername());
         } else {
             return saveUser(user);
         }
