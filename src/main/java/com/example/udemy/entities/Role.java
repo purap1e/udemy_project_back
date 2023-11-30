@@ -1,22 +1,24 @@
 package com.example.udemy.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.UUID;
 
-import static javax.persistence.GenerationType.IDENTITY;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "roles")
 public class Role {
+
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    @Column
+    @GeneratedValue
+    protected UUID id;
 
     @Column(name = "name")
     private String name;

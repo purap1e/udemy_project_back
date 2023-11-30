@@ -1,15 +1,14 @@
 package com.example.udemy.services;
 
-import com.example.udemy.entities.Role;
-import com.example.udemy.entities.User;
+import com.example.udemy.dto.UserLoginRequestDTO;
+import com.example.udemy.dto.UserResponseDTO;
+import com.example.udemy.exceptions.UsernameExistsException;
 
-import java.util.List;
+import java.util.UUID;
 
 public interface UserService {
-    User saveUser(User user);
-    Role saveRole(Role role);
-    void addRoleToUser(String username, String roleName);
-    User getUser(String username);
-    User registerUser(User user) throws Exception;
-    List<User> getUsers();
+    UserResponseDTO getUser(UUID id);
+    UUID register(UserLoginRequestDTO userLoginRequestDTO) throws UsernameExistsException;
+
+    UUID addRoleToUser(UUID userId, String roleName);
 }

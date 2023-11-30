@@ -1,10 +1,12 @@
 package com.example.udemy.services.impl;
 
+import com.example.udemy.dto.UserLoginRequestDTO;
+import com.example.udemy.dto.UserResponseDTO;
 import com.example.udemy.entities.Role;
 import com.example.udemy.entities.User;
 import com.example.udemy.exceptions.UsernameExistsException;
-import com.example.udemy.repositories.RoleRepository;
 import com.example.udemy.repositories.UserRepository;
+import com.example.udemy.services.RoleService;
 import com.example.udemy.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +17,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -42,50 +43,40 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
         return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authorities);
     }
-
     @Override
-    public User saveUser(User user) {
-        log.info("Saving new user {} to the database", user.getUsername());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
-
-    @Override
-    public Role saveRole(Role role) {
-        log.info("Saving new role {} to the database", role.getName());
-        return roleRepository.save(role);
-    }
-
-    @Override
-    public void addRoleToUser(String username, String roleName) {
-        log.info("Adding role {} to user {}", roleName,username);
-        User user = userRepository.findByUsername(username);
-        Role role = roleRepository.findByName(roleName);
-        user.getRoles().add(role);
-    }
-
-    @Override
-    public User getUser(String username) {
-        log.info("Fetching user {}", username);
-        return userRepository.findByUsername(username);
-    }
-
-    @Override
-    public User registerUser(User user) throws Exception {
-        if (usernameExist(user.getUsername())) {
-            throw new UsernameExistsException(user.getUsername());
+    public UUID register(UserLoginRequestDTO userLoginRequestDTO) throws UsernameExistsException {
+        if (usernameExist(userLoginRequestDTO.getUsername())) {
+            throw new UsernameExistsException(userLoginRequestDTO.getUsername());
         } else {
-            return saveUser(user);
+            User user = new User();
+            user.setUsername(userLoginRequestDTO.getUsername());
+            user.setFirstName(userLoginRequestDTO.getFirstName());
+            user.setLastName(userLoginRequestDTO.getLastName());
+            user.setPassword(passwordEncoder.encode(userLoginRequestDTO.getPassword()));
+            return userRepository.save(user).getId();
         }
+    }
+
+    @Override
+    public UUID addRoleToUser(UUID userId, String roleName) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("user not found"));
+        Role role = roleService.findByName(roleName);
+        user.getRoles().add(role);
+        return userRepository.save(user).getId();
+    }
+
+    @Override
+    public UserResponseDTO getUser(UUID id) {
+        log.info("Fetching user with id {}", id);
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("user not found"));
+        return UserResponseDTO.builder()
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .build();
     }
 
     private boolean usernameExist(String username) {
         return userRepository.findByUsername(username) != null;
-    }
-
-    @Override
-    public List<User> getUsers() {
-        log.info("Fetching all users");
-        return userRepository.findAll();
     }
 }
