@@ -3,6 +3,7 @@ package com.example.udemy.filters;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.udemy.properties.JwtProperties;
+import com.example.udemy.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +26,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     private final AuthenticationManager authenticationManager;
     private final JwtProperties jwtProperties;
+    private final UserRepository userRepository;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -39,9 +41,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
+        com.example.udemy.entities.User user1 = userRepository.findByUsername(user.getUsername());
         Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret().getBytes());
         String access_token = JWT.create()
-                .withSubject(user.getUsername())
+                .withSubject(user1.getId().toString())
                 .withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getExpiresAt()))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))

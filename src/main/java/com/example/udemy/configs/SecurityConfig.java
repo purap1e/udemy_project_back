@@ -3,6 +3,7 @@ package com.example.udemy.configs;
 import com.example.udemy.filters.CustomAuthenticationFilter;
 import com.example.udemy.filters.CustomAuthorizationFilter;
 import com.example.udemy.properties.JwtProperties;
+import com.example.udemy.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder bCryptPasswordEncoder;
     private final JwtProperties jwtProperties;
+    private final UserRepository userRepository;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -54,16 +56,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                         .antMatchers("/api/v1/auth/login",
-                                "/api/v1/auth/signup",
                                 "/api/v1/auth/signup").permitAll()
-                        .antMatchers("/api/v1/roles/**", "/api/v1/auth/add-role-to-user").hasAuthority("ADMIN");
+                        .antMatchers( "/api/v1/auth/add-role-to-user").hasAuthority("ADMIN");
 
         http.addFilter(jwtAuthorizationFilter());
         http.addFilterBefore(new CustomAuthorizationFilter(jwtProperties), UsernamePasswordAuthenticationFilter.class);
     }
 
     public CustomAuthenticationFilter jwtAuthorizationFilter() throws Exception {
-        CustomAuthenticationFilter jwtAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(), jwtProperties);
+        CustomAuthenticationFilter jwtAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(), jwtProperties, userRepository);
         jwtAuthenticationFilter.setFilterProcessesUrl("/api/v1/auth/login");
         return jwtAuthenticationFilter;
     }
