@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -53,6 +54,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.setFirstName(userLoginRequestDTO.getFirstName());
             user.setLastName(userLoginRequestDTO.getLastName());
             user.setPassword(passwordEncoder.encode(userLoginRequestDTO.getPassword()));
+            Role role = roleService.findByName("USER");
+            user.setRoles(List.of(role));
             return userRepository.save(user).getId();
         }
     }
