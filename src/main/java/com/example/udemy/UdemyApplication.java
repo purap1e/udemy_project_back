@@ -14,15 +14,15 @@ public class UdemyApplication {
         SpringApplication.run(UdemyApplication.class, args);
     }
 
-//    @Bean
-//    public CommandLineRunner CommandLineRunnerBean(RoleRepository roleRepository) {
-//        return (args) -> {
-//            Role role = new Role();
-//            role.setName("USER");
-//            Role role1 = new Role();
-//            role1.setName("ADMIN");
-//            roleRepository.save(role1);
-//            roleRepository.save(role);
-//        };
-//    }
+    @Bean
+    public CommandLineRunner CommandLineRunnerBean(RoleRepository roleRepository) {
+        return (args) -> {
+            Role role = new Role();
+            role.setName("USER");
+            Role role1 = new Role();
+            role1.setName("ADMIN");
+            roleRepository.save(role1);
+            roleRepository.save(role);
+        };
+    }
 }
