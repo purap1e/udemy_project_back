@@ -5,9 +5,9 @@ spring:
   application:
     name: service
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: postgres
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
   jpa:
     generate-ddl: false
@@ -20,14 +20,6 @@ management:
     web:
       exposure:
         include: "*"
-
-elasticsearch:
-  index-names:
-    spotify: spotify
-  host: ${ELASTICSEARCH_HOST_CORE:localhost}
-  port: ${ELASTICSEARCH_PORT:9200}
-  username: ${ELASTICSEARCH_USERNAME:elastic}
-  password: ${ELASTICSEARCH_PASSWORD:elastic}
 
 jwt:
   secret: jdksladklsajdlkasdjlsadkasl
