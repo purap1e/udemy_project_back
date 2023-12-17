@@ -1,0 +1,4 @@
+export ELASTICSEARCH_HOST=http://elasticsearch
+export ELASTICSEARCH_PORT=9200
+export ELASTICSEARCH_USERNAME=elastic
+export ELASTICSEARCH_PASSWORD=elastic

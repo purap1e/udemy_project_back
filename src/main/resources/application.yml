@@ -21,6 +21,14 @@ management:
       exposure:
         include: "*"
 
+elasticsearch:
+  index-names:
+    spotify: spotify
+  host: ${ELASTICSEARCH_HOST_CORE:localhost}
+  port: ${ELASTICSEARCH_PORT:9200}
+  username: ${ELASTICSEARCH_USERNAME:elastic}
+  password: ${ELASTICSEARCH_PASSWORD:elastic}
+
 jwt:
   secret: jdksladklsajdlkasdjlsadkasl
   expiresAt: 1800000
