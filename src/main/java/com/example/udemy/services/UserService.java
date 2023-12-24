@@ -1,7 +1,7 @@
 package com.example.udemy.services;
 
-import com.example.udemy.dto.UserLoginRequestDTO;
-import com.example.udemy.dto.UserResponseDTO;
+import com.example.udemy.dto.user.UserLoginRequestDTO;
+import com.example.udemy.dto.user.UserResponseDTO;
 import com.example.udemy.exceptions.UsernameExistsException;
 
 import java.util.UUID;

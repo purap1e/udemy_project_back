@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="rename_playlist_song_table" author="Daniyar">
+        <dropTable tableName="playlists_songs"/>
+
+        <createTable tableName="playlists_song">
+            <column name="playlist_id" type="uuid"/>
+            <column name="song_id" type="uuid"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

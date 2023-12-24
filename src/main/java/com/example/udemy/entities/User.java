@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static javax.persistence.FetchType.EAGER;
@@ -33,6 +33,6 @@ public class User {
     private String password;
 
     @ManyToMany(fetch = EAGER)
-    private List<Role> roles;
+    private Set<Role> roles;
 
 }

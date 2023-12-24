@@ -12,8 +12,16 @@ spring:
   jpa:
     generate-ddl: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+  liquibase:
+    change-log: db/changelog/liquibase-changelog.xml
+    database-change-log-table: changelog_${spring.application.name}
+    database-change-log-lock-table: changelog_lock_${spring.application.name}
 
 management:
   endpoints:
@@ -22,5 +30,11 @@ management:
         include: "*"
 
 jwt:
-  secret: jdksladklsajdlkasdjlsadkasl
+  secret: ${JWT_SECRET:jdksladklsajdlkasdjlsadkasl}
   expiresAt: 1800000
+
+minio:
+  bucket: ${MINIO_BUCKET:data}
+  url: ${MINIO_URL:http://localhost:9000}
+  accessKey: ${MINIO_ACCESS_KEY:minioadmin}
+  secretKey: ${MINIO_SECRET_KEY:minioadmin}

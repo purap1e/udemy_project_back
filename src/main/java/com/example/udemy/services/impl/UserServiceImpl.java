@@ -1,10 +1,11 @@
 package com.example.udemy.services.impl;
 
-import com.example.udemy.dto.UserLoginRequestDTO;
-import com.example.udemy.dto.UserResponseDTO;
+import com.example.udemy.dto.user.UserLoginRequestDTO;
+import com.example.udemy.dto.user.UserResponseDTO;
 import com.example.udemy.entities.Role;
 import com.example.udemy.entities.User;
 import com.example.udemy.exceptions.UsernameExistsException;
+import com.example.udemy.mapper.UserMapper;
 import com.example.udemy.repositories.UserRepository;
 import com.example.udemy.services.RoleService;
 import com.example.udemy.services.UserService;
@@ -17,10 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -30,6 +28,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private final UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -49,13 +48,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (usernameExist(userLoginRequestDTO.getUsername())) {
             throw new UsernameExistsException(userLoginRequestDTO.getUsername());
         } else {
-            User user = new User();
-            user.setUsername(userLoginRequestDTO.getUsername());
-            user.setFirstName(userLoginRequestDTO.getFirstName());
-            user.setLastName(userLoginRequestDTO.getLastName());
+            User user = userMapper.toEntity(userLoginRequestDTO);
             user.setPassword(passwordEncoder.encode(userLoginRequestDTO.getPassword()));
             Role role = roleService.findByName("USER");
-            user.setRoles(List.of(role));
+            user.setRoles(Set.of(role));
             return userRepository.save(user).getId();
         }
     }

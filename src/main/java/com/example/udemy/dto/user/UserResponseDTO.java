@@ -1,4 +1,4 @@
-package com.example.udemy.dto;
+package com.example.udemy.dto.user;
 
 import lombok.Builder;
 import lombok.Getter;

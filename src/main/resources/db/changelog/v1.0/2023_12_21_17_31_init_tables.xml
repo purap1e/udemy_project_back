@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create_role_table" author="Daniyar">
+        <createTable tableName="roles">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_user_table" author="Daniyar">
+        <createTable tableName="users">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar"/>
+            <column name="last_name" type="varchar"/>
+            <column name="username" type="varchar"/>
+            <column name="password" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_role_user_table" author="Daniyar">
+        <createTable tableName="users_roles">
+            <column name="roles_id" type="uuid"/>
+            <column name="user_id" type="uuid"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_foreign_key_to_user_roles" author="Daniyar">
+        <addForeignKeyConstraint
+                baseTableName="users_roles"
+                baseColumnNames="roles_id"
+                constraintName="fk_role"
+                referencedTableName="roles"
+                referencedColumnNames="id"
+                onDelete="NO ACTION"
+                onUpdate="NO ACTION"
+        />
+        <addForeignKeyConstraint
+                baseTableName="users_roles"
+                baseColumnNames="user_id"
+                constraintName="fk_user"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                onDelete="NO ACTION"
+                onUpdate="NO ACTION"
+        />
+    </changeSet>
+
+    <changeSet id="create_song_table" author="Daniyar">
+        <createTable tableName="songs">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar"/>
+            <column name="artist" type="varchar"/>
+            <column name="album" type="varchar"/>
+            <column name="image" type="varchar"/>
+            <column name="audio" type="varchar"/>
+            <column name="updated_time" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="insert_roles" author="Daniyar">
+        <sql>
+            INSERT INTO roles (id, name)
+            VALUES ('8affbb04-7f91-11ee-b962-0242ac120002',
+                    'USER'),
+                   (
+                    'e2ace2ae-f945-4376-b21b-d1976859b12c',
+                    'ADMIN'
+                   );
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_playlist_table" author="Daniyar">
+        <createTable tableName="playlists">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar"/>
+            <column name="image" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_playlist_song_table" author="Daniyar">
+        <createTable tableName="playlists_songs">
+            <column name="playlist_id" type="uuid"/>
+            <column name="song_id" type="uuid"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_foreign_key_to_playlist_song" author="Daniyar">
+        <addForeignKeyConstraint
+                baseTableName="playlists_songs"
+                baseColumnNames="playlist_id"
+                constraintName="fk_playlist"
+                referencedTableName="playlists"
+                referencedColumnNames="id"
+                onDelete="NO ACTION"
+                onUpdate="NO ACTION"
+        />
+        <addForeignKeyConstraint
+                baseTableName="playlists_songs"
+                baseColumnNames="song_id"
+                constraintName="fk_song"
+                referencedTableName="songs"
+                referencedColumnNames="id"
+                onDelete="NO ACTION"
+                onUpdate="NO ACTION"
+        />
+    </changeSet>
+
+</databaseChangeLog>
