@@ -12,6 +12,5 @@ public interface PlaylistService {
     UUID save(String name, MultipartFile image);
     List<SongResponseDto> getAllSongsByPlaylist(UUID playlistId);
     UUID addSongs(UUID playlistId, List<UUID> ids);
-
     PlaylistResponseDto get(UUID id);
 }
