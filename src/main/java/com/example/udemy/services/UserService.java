@@ -1,9 +1,11 @@
 package com.example.udemy.services;
 
+import com.example.udemy.dto.song.SongResponseDto;
 import com.example.udemy.dto.user.UserLoginRequestDTO;
 import com.example.udemy.entities.User;
 import com.example.udemy.exceptions.UsernameExistsException;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
@@ -12,4 +14,5 @@ public interface UserService {
     UUID addRoleToUser(UUID userId, String roleName);
     void addSongToUser(UUID userId, UUID songId);
     void deleteSongFromUser(UUID userId, UUID songId);
+    List<SongResponseDto> getAllFavourites(UUID userId);
 }

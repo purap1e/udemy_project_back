@@ -64,6 +64,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         songs.forEach(song -> {
             SongResponseDto songResponseDto = songResponseMapper.apply(song);
             if (user.getSong().contains(song)) {
+                songResponseDto.setTest(1);
                 songResponseDto.setIsFavourite(true);
             }
             songResponseDtoList.add(songResponseDto);

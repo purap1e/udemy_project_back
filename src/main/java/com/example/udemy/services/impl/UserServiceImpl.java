@@ -1,11 +1,13 @@
 package com.example.udemy.services.impl;
 
+import com.example.udemy.dto.song.SongResponseDto;
 import com.example.udemy.dto.user.UserLoginRequestDTO;
 import com.example.udemy.entities.Role;
 import com.example.udemy.entities.Song;
 import com.example.udemy.entities.User;
 import com.example.udemy.exceptions.NotFoundException;
 import com.example.udemy.exceptions.UsernameExistsException;
+import com.example.udemy.mapper.SongResponseMapper;
 import com.example.udemy.mapper.UserMapper;
 import com.example.udemy.repositories.UserRepository;
 import com.example.udemy.services.RoleService;
@@ -32,6 +34,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final RoleService roleService;
     private final UserMapper userMapper;
     private final SongService songService;
+    private final SongResponseMapper songResponseMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -93,5 +96,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         user.getSong().remove(song);
         userRepository.save(user);
+    }
+
+    @Override
+    public List<SongResponseDto> getAllFavourites(UUID userId) {
+        User user = getUser(userId);
+        return user.getSong().stream().map(songResponseMapper).toList();
     }
 }

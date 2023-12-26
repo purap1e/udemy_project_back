@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -30,6 +31,6 @@ public class User {
     @ManyToMany(fetch = EAGER)
     private Set<Role> roles;
 
-    @ManyToMany
+    @ManyToMany(fetch = EAGER)
     private List<Song> song;
 }
