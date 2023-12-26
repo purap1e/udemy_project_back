@@ -7,6 +7,7 @@ import com.example.udemy.exceptions.NotFoundException;
 import com.example.udemy.mapper.SongMapper;
 import com.example.udemy.mapper.SongResponseMapper;
 import com.example.udemy.repositories.SongRepository;
+import com.example.udemy.services.ElasticsearchService;
 import com.example.udemy.services.SongService;
 import com.example.udemy.services.StorageService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class SongServiceImpl implements SongService {
     private final SongRepository songRepository;
     private final SongResponseMapper songResponseMapper;
     private final StorageService storageService;
+    private final ElasticsearchService elasticsearchService;
 
     @Override
     public UUID save(SongDto songDto) {
@@ -47,6 +49,10 @@ public class SongServiceImpl implements SongService {
         String audioFileName = storageService.upload(audio);
         song.setImage(imageFileName);
         song.setAudio(audioFileName);
+
+        SongResponseDto songResponseDto = songResponseMapper.apply(song);
+        elasticsearchService.addSongToElastic(songResponseDto);
+
         songRepository.save(song);
     }
 
@@ -63,5 +69,10 @@ public class SongServiceImpl implements SongService {
     @Override
     public Song getEntitySong(UUID id) {
         return songRepository.findById(id).orElseThrow(() -> new NotFoundException("song not found"));
+    }
+
+    @Override
+    public List<SongResponseDto> getAllBySearching(String name) {
+        return elasticsearchService.searchByName(name);
     }
 }

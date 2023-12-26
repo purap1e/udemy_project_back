@@ -15,4 +15,5 @@ public interface SongService {
     List<SongResponseDto> getAll();
     List<Song> getAllByIds(List<UUID> ids);
     Song getEntitySong(UUID id);
+    List<SongResponseDto> getAllBySearching(String name);
 }

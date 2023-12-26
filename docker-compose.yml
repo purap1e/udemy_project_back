@@ -54,7 +54,7 @@ services:
       ELASTIC_PASSWORD: elastic
       # Use single node discovery in order to disable production mode and avoid bootstrap checks
       # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
-#      discovery.type: single-node
+      discovery.type: single-node
 #      # X-Pack security needs to be enabled for Elasticsearch to actually authenticate requests
 #      xpack.security.enabled: "true"
     ports:

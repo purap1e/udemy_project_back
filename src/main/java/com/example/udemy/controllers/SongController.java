@@ -33,4 +33,9 @@ public class SongController {
     public List<SongResponseDto> getAll() {
         return songService.getAll();
     }
+
+    @GetMapping("/search")
+    public List<SongResponseDto> getAllAfterSearch(@RequestParam String name) {
+        return songService.getAllBySearching(name);
+    }
 }
