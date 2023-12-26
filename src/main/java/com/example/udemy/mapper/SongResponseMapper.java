@@ -17,6 +17,7 @@ public class SongResponseMapper implements Function<Song, SongResponseDto> {
                 .image("http://localhost:9000/data/" + song.getImage())
                 .audio("http://localhost:9000/data/" + song.getAudio())
                 .updatedTime(song.getUpdatedTime())
+                .isFavourite(false)
                 .build();
     }
 }

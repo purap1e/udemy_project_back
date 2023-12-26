@@ -35,8 +35,9 @@ public class PlaylistController {
     }
 
     @GetMapping("/{id}/songs")
-    public List<SongResponseDto> getAllSongsOfPlaylist(@PathVariable UUID id) {
-        return playlistService.getAllSongsByPlaylist(id);
+    public List<SongResponseDto> getAllSongsOfPlaylist(@PathVariable UUID id,
+                                                       @RequestParam UUID userId) {
+        return playlistService.getAllSongsByPlaylist(userId, id);
     }
 
     @PostMapping("/add-songs/{id}")

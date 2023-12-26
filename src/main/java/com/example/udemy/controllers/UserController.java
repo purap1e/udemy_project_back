@@ -1,7 +1,6 @@
 package com.example.udemy.controllers;
 
 import com.example.udemy.dto.user.UserLoginRequestDTO;
-import com.example.udemy.dto.user.UserResponseDTO;
 import com.example.udemy.exceptions.UsernameExistsException;
 import com.example.udemy.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +27,16 @@ public class UserController {
         return userService.addRoleToUser(userId, roleName);
     }
 
-    @GetMapping("/{userId}")
-    public UserResponseDTO get(@PathVariable UUID userId) {
-        return userService.getUser(userId);
+    @PostMapping("/add-song")
+    public void addSong(@RequestParam UUID userId,
+                        @RequestParam UUID songId) {
+        userService.addSongToUser(userId, songId);
     }
+
+    @DeleteMapping
+    public void deleteSong(@RequestParam UUID userId,
+                           @RequestParam UUID songId) {
+        userService.deleteSongFromUser(userId, songId);
+    }
+
 }

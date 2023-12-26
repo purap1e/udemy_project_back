@@ -16,4 +16,5 @@ public class SongResponseDto {
     private String image;
     private String audio;
     private Date updatedTime;
+    private Boolean isFavourite;
 }

@@ -4,4 +4,5 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
     <include file="2023_12_21_17_31_init_tables.xml" relativeToChangelogFile="true"/>
     <include file="2023_12_21_20_03_change_column_name.xml" relativeToChangelogFile="true"/>
+    <include file="2023_12_26_16_28_init_users_songs_table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

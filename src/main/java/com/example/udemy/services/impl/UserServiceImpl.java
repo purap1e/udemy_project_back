@@ -1,13 +1,15 @@
 package com.example.udemy.services.impl;
 
 import com.example.udemy.dto.user.UserLoginRequestDTO;
-import com.example.udemy.dto.user.UserResponseDTO;
 import com.example.udemy.entities.Role;
+import com.example.udemy.entities.Song;
 import com.example.udemy.entities.User;
+import com.example.udemy.exceptions.NotFoundException;
 import com.example.udemy.exceptions.UsernameExistsException;
 import com.example.udemy.mapper.UserMapper;
 import com.example.udemy.repositories.UserRepository;
 import com.example.udemy.services.RoleService;
+import com.example.udemy.services.SongService;
 import com.example.udemy.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
     private final UserMapper userMapper;
+    private final SongService songService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -58,24 +61,37 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UUID addRoleToUser(UUID userId, String roleName) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("user not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
         Role role = roleService.findByName(roleName);
         user.getRoles().add(role);
         return userRepository.save(user).getId();
     }
 
     @Override
-    public UserResponseDTO getUser(UUID id) {
+    public User getUser(UUID id) {
         log.info("Fetching user with id {}", id);
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("user not found"));
-        return UserResponseDTO.builder()
-                .username(user.getUsername())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .build();
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
     }
 
     private boolean usernameExist(String username) {
         return userRepository.findByUsername(username) != null;
+    }
+
+    @Override
+    public void addSongToUser(UUID userId, UUID songId) {
+        User user = getUser(userId);
+        Song song = songService.getEntitySong(songId);
+
+        user.getSong().add(song);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void deleteSongFromUser(UUID userId, UUID songId) {
+        User user = getUser(userId);
+        Song song = songService.getEntitySong(songId);
+
+        user.getSong().remove(song);
+        userRepository.save(user);
     }
 }

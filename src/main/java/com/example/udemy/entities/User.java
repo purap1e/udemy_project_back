@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,12 +21,6 @@ public class User {
     @GeneratedValue
     protected UUID id;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
     @Column(name = "username")
     private String username;
 
@@ -35,4 +30,6 @@ public class User {
     @ManyToMany(fetch = EAGER)
     private Set<Role> roles;
 
+    @ManyToMany
+    private List<Song> song;
 }

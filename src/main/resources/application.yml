@@ -38,3 +38,11 @@ minio:
   url: ${MINIO_URL:http://localhost:9000}
   accessKey: ${MINIO_ACCESS_KEY:minioadmin}
   secretKey: ${MINIO_SECRET_KEY:minioadmin}
+
+elasticsearch:
+  host: ${ELASTICSEARCH_HOST_CORE:localhost}
+  port: ${ELASTICSEARCH_PORT:9200}
+  username: ${ELASTICSEARCH_USERNAME:elastic}
+  password: ${ELASTICSEARCH_PASSWORD:elastic}
+  index-names:
+    songs: songs

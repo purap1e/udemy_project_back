@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface PlaylistService {
     List<PlaylistResponseDto> getAll();
     UUID save(String name, MultipartFile image);
-    List<SongResponseDto> getAllSongsByPlaylist(UUID playlistId);
+    List<SongResponseDto> getAllSongsByPlaylist(UUID userId, UUID playlistId);
     UUID addSongs(UUID playlistId, List<UUID> ids);
     PlaylistResponseDto get(UUID id);
 }

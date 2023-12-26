@@ -20,6 +20,8 @@
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <minio.version>8.5.3</minio.version>
         <liquibase.version>4.17.2</liquibase.version>
+        <elasticsearch-rest-high-level-client.version>7.16.2</elasticsearch-rest-high-level-client.version>
+        <spring-boot-starter-data-elasticsearch.version>2.7.7</spring-boot-starter-data-elasticsearch.version>
     </properties>
 
     <dependencies>
@@ -96,6 +98,18 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>${elasticsearch-rest-high-level-client.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+            <version>${spring-boot-starter-data-elasticsearch.version}</version>
         </dependency>
 
     </dependencies>

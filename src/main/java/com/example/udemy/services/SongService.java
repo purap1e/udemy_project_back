@@ -14,4 +14,5 @@ public interface SongService {
     void uploadData(UUID songId, MultipartFile image, MultipartFile audio);
     List<SongResponseDto> getAll();
     List<Song> getAllByIds(List<UUID> ids);
+    Song getEntitySong(UUID id);
 }

@@ -3,6 +3,7 @@ package com.example.udemy.services.impl;
 import com.example.udemy.dto.song.SongDto;
 import com.example.udemy.dto.song.SongResponseDto;
 import com.example.udemy.entities.Song;
+import com.example.udemy.exceptions.NotFoundException;
 import com.example.udemy.mapper.SongMapper;
 import com.example.udemy.mapper.SongResponseMapper;
 import com.example.udemy.repositories.SongRepository;
@@ -35,13 +36,13 @@ public class SongServiceImpl implements SongService {
 
     @Override
     public SongResponseDto get(UUID songId) {
-        Song song = songRepository.findById(songId).orElseThrow(() -> new RuntimeException("song not found"));
+        Song song = songRepository.findById(songId).orElseThrow(() -> new NotFoundException("song not found"));
         return songResponseMapper.apply(song);
     }
 
     @Override
     public void uploadData(UUID songId, MultipartFile image, MultipartFile audio) {
-        Song song = songRepository.findById(songId).orElseThrow(() -> new RuntimeException("song not found"));
+        Song song = songRepository.findById(songId).orElseThrow(() -> new NotFoundException("song not found"));
         String imageFileName = storageService.upload(image);
         String audioFileName = storageService.upload(audio);
         song.setImage(imageFileName);
@@ -57,5 +58,10 @@ public class SongServiceImpl implements SongService {
     @Override
     public List<Song> getAllByIds(List<UUID> ids) {
         return songRepository.findAllByIdIn(ids);
+    }
+
+    @Override
+    public Song getEntitySong(UUID id) {
+        return songRepository.findById(id).orElseThrow(() -> new NotFoundException("song not found"));
     }
 }
